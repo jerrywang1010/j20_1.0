@@ -13,10 +13,12 @@ public class MyGameFrame extends JFrame{
     Image planeImg = GameUtil.getImage("Images/shabi.png");
 
     Plane plane = new Plane(planeImg, 250, 250);
-//    Shell shell = new Shell();
 
     Shell[] shell_list = new Shell[50];
 
+    boolean collide = false;
+
+    Explode explode;
 
     @Override
     public void paint(Graphics g) {
@@ -25,12 +27,27 @@ public class MyGameFrame extends JFrame{
 
 
         g.drawImage(bg, 0, 0, null);
-//        g.drawImage(plane, x, y, null);
         plane.drawSelf(g);
+
+
+
 
         for (int i = 0; i < shell_list.length; i ++){
             shell_list[i].drawSelf(g);
+
+            collide = shell_list[i].getRect().intersects(plane.getRect());
+            if (collide) {
+                System.out.println("collision!!!");
+                plane.alive = false;
+
+                    if (explode == null)
+                        explode = new Explode(plane.x, plane.y);
+
+                    explode.draw(g);
+            }
         }
+
+
 
 
     }
@@ -42,7 +59,7 @@ public class MyGameFrame extends JFrame{
             super.run();
             while(true){
                 repaint();
-//                System.out.println("重画");
+//                System.out.println("??");
                 try {
                     Thread.sleep(40);
                 }catch (InterruptedException e){
@@ -57,20 +74,23 @@ public class MyGameFrame extends JFrame{
         @Override
         public void keyPressed(KeyEvent e) {
             super.keyPressed(e);
-            System.out.println("按下 " + e.getKeyCode());
-            plane.direction(e);
+//            System.out.println("?? " + e.getKeyCode());
+            plane.addDirection(e);
+//            plane.direction(e);
         }
+
 
         @Override
         public void keyReleased(KeyEvent e) {
             super.keyReleased(e);
-            System.out.println("送开 " + e.getKeyCode());
+//            System.out.println("?? " + e.getKeyCode());
+            plane.minusDirection(e);
         }
     }
 
 
     public void launchFrame(){
-        this.setTitle("王子元的j20");
+        this.setTitle("????j20");
         this.setVisible(true);
         this.setSize(500, 500);
         //this.setLocation(300, 300);
@@ -95,7 +115,16 @@ public class MyGameFrame extends JFrame{
     public static void main(String[] args) {
         MyGameFrame f = new MyGameFrame();
         f.launchFrame();
-
-
     }
+
+    private Image offScreenImage = null;
+    public void update(Graphics g){
+        if (offScreenImage == null)
+            offScreenImage = this.createImage(Constant.GAME_WIDTH,Constant.GAME_HEIGHT);
+
+        Graphics gOff = offScreenImage.getGraphics();
+        paint(gOff);
+        g.drawImage(offScreenImage, 0, 0, null);
+    }
+
 }
