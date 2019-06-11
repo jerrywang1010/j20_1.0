@@ -13,16 +13,16 @@ public class Plane  extends GameObject {
         if(alive){
             g.drawImage(img, (int)x,(int) y, null);
 
-            if(left){
+            if(left && x > 10){
                 x -=speed;
             }
-            if(right){
+            if(right && x < Constant.GAME_WIDTH - 30){
                 x += speed;
             }
-            if(up){
+            if(up && y > 33){
                 y -=speed;    //y = y-speed;
             }
-            if(down){
+            if(down && y < Constant.GAME_HEIGHT - 40) {
                 y += speed;
             }
         }else{
@@ -43,7 +43,7 @@ public class Plane  extends GameObject {
 
     }
 
-    //°´ÏÂÄ³¸ö¼ü£¬Ôö¼ÓÏàÓ¦µÄ·½Ïò
+
     public  void   addDirection(KeyEvent  e){
         switch (e.getKeyCode()) {
             case KeyEvent.VK_A:
@@ -62,30 +62,6 @@ public class Plane  extends GameObject {
     }
 
 
-
-    public void direction(KeyEvent e) {
-        speed = 15;
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_A:
-                left = true;
-//                System.out.println("left");
-                break;
-            case KeyEvent.VK_W:
-                up = true;
-//                System.out.println("up");
-                break;
-            case KeyEvent.VK_S:
-                down = true;
-//                System.out.println("down");
-                break;
-            case KeyEvent.VK_D:
-                right = true;
-//                System.out.println("right");
-                break;
-        }
-    }
-
-    //°´ÏÂÄ³¸ö¼ü£¬È¡ÏûÏàÓ¦µÄ·½Ïò
     public  void   minusDirection(KeyEvent e){
         switch (e.getKeyCode()) {
             case KeyEvent.VK_A:

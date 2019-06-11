@@ -14,6 +14,13 @@ public class Shell extends GameObject {
 
         degree = Math.random()*Math.PI*2;
     }
+    public Shell(double x, double y){
+        this.x = x;
+        this.y = y;
+        width = 10;
+        height = 10;
+        speed = 3;
+    }
 
     @Override
     public void drawSelf(Graphics g) {
