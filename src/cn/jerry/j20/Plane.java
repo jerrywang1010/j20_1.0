@@ -37,12 +37,51 @@ public class Plane  extends GameObject {
         this.img = img;
         this.x = x;
         this.y = y;
-        this.speed = 3;
+        this.speed = 5;
         this.width = img.getWidth(null) ;
         this.height = img.getHeight(null);
 
     }
 
+    //degree in radian
+    public void dodge(double degree){
+        if (degree >= 0 && degree < Math.PI / 2) {
+            System.out.println("degree = " + degree + " up_right");
+            up = true;
+            right = true;
+//            reset();
+            return;
+        }
+        if (degree >= Math.PI / 2 && degree < Math.PI) {
+            System.out.println("degree = " + degree + " up_left");
+            up = true;
+            left = true;
+//            reset();
+            return;
+        }
+        if (degree >= Math.PI && degree < Math.PI * 3/2) {
+            System.out.println("degree = " + degree + " down_left");
+            down = true;
+            left = true;
+//            reset();
+            return;
+        }
+        if (degree >= Math.PI * 3/2 && degree < Math.PI * 2) {
+            System.out.println("degree = " + degree + " down_right");
+            down = true;
+            right = true;
+//            reset();
+            return;
+        }
+
+    }
+
+    public void reset(){
+        left = false;
+        right = false;
+        up = false;
+        down = false;
+    }
 
     public  void   addDirection(KeyEvent  e){
         switch (e.getKeyCode()) {

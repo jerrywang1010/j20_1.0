@@ -17,7 +17,7 @@ public class MyGameFrame extends JFrame{
 
     Shell[] shell_list = new Shell[10];
 
-
+    double closet_shell_degree;
 
 
     boolean collide = false;
@@ -37,12 +37,14 @@ public class MyGameFrame extends JFrame{
            int speed = shell_list[i].speed;
            double distance = Math.sqrt(Math.pow((plane.x - shell_list[i].x), 2) +
                                         Math.pow((plane.y - shell_list[i].y), 2));
-           double time = 0;
+           double time = Double.POSITIVE_INFINITY;
 //           double degree_shell_to_plane = Math.atan((plane.y - shell_list[i].y) /
 //                                                    (plane.x - shell_list[i].x));
 
 //           if (direction - degree_shell_to_plane > -Math.PI / 2 && direction - degree_shell_to_plane < Math.PI / 2){
 //           }
+
+           //if the shell is going to hit plane, time equals the steps required, if shell will miss, time = inf
            for (int step = 0; step < distance / speed; step ++){
                Shell test_shell = new Shell(shell_list[i].x + speed * Math.cos(direction) * step,
                                             shell_list[i].y + Math.sin(direction) * step * speed);
@@ -67,17 +69,35 @@ public class MyGameFrame extends JFrame{
        }
    }
 
+   public double find_closest_degree (Waigua[] waigua_list){
+       Waigua closest = waigua_list[0];
+       for (int i = 1; i < waigua_list.length; i ++){
+           if (waigua_list[i].time < closest.time)
+               closest = waigua_list[i];
+       }
+       double degree = 0;
+       if (closest.time != Double.POSITIVE_INFINITY){
+           degree = closest.degree;
+       }
+       else
+           degree = Double.POSITIVE_INFINITY;
+       return degree;
+   }
+
+
 
     @Override
     public void paint(Graphics g) {
         g.clearRect(0,0,this.getWidth(),this.getHeight());
 
 
-
         g.drawImage(bg, 0, 0, null);
         plane.drawSelf(g);
 
-
+        waigua_list = initialize_waigua(plane, shell_list);
+//        print_waigua_list(waigua_list);
+        closet_shell_degree = find_closest_degree(waigua_list);
+        plane.dodge(closet_shell_degree);
 
 
         for (int i = 0; i < shell_list.length; i ++){
@@ -167,13 +187,14 @@ public class MyGameFrame extends JFrame{
         for (int i = 0; i < shell_list.length; i ++){
             shell_list[i] = new Shell();
         }
+//        initialize_waigua(plane, shell_list);
+//        print_waigua_list(waigua_list);
     }
 
     public static void main(String[] args) {
         MyGameFrame f = new MyGameFrame();
         f.launchFrame();
-        f.initialize_waigua(f.plane, f.shell_list);
-        f.print_waigua_list(f.waigua_list);
+
     }
 
     private Image offScreenImage = null;
