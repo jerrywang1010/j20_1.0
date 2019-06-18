@@ -15,7 +15,7 @@ public class MyGameFrame extends JFrame{
 
     Plane plane = new Plane(planeImg, 250, 250);
 
-    Shell[] shell_list = new Shell[10];
+    Shell[] shell_list = new Shell[1];
 
     double closet_shell_degree;
 
@@ -92,12 +92,16 @@ public class MyGameFrame extends JFrame{
 
 
         g.drawImage(bg, 0, 0, null);
-        plane.drawSelf(g);
 
-        waigua_list = initialize_waigua(plane, shell_list);
+
+//        waigua_list = initialize_waigua(plane, shell_list);
 //        print_waigua_list(waigua_list);
-        closet_shell_degree = find_closest_degree(waigua_list);
-        plane.dodge(closet_shell_degree);
+//        closet_shell_degree = find_closest_degree(waigua_list);
+//        plane.dodge(closet_shell_degree);
+
+
+        System.out.println(plane.x + "  " + plane.y);
+        plane.drawSelf(g);
 
 
         for (int i = 0; i < shell_list.length; i ++){
@@ -118,6 +122,8 @@ public class MyGameFrame extends JFrame{
 
 
         }
+
+        plane.dodge(shell_list);
 
         if (!plane.alive) {
             g.setColor(Color.RED);
@@ -179,14 +185,15 @@ public class MyGameFrame extends JFrame{
             }
         });
 
+        for (int i = 0; i < shell_list.length; i ++){
+            shell_list[i] = new Shell();
+        }
 
         new PaintThread().start();
         addKeyListener(new KeyMonitor());
 
 
-        for (int i = 0; i < shell_list.length; i ++){
-            shell_list[i] = new Shell();
-        }
+
 //        initialize_waigua(plane, shell_list);
 //        print_waigua_list(waigua_list);
     }

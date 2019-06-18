@@ -10,7 +10,7 @@ public class Shell extends GameObject {
         y = 200;
         width = 10;
         height = 10;
-        speed = 2;
+        speed = 10;
 
         degree = Math.random()*Math.PI*2;
     }
@@ -19,7 +19,7 @@ public class Shell extends GameObject {
         this.y = y;
         width = 10;
         height = 10;
-        speed = 3;
+        speed = 10;
     }
 
     @Override
