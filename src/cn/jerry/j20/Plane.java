@@ -82,129 +82,130 @@ public class Plane  extends GameObject {
 
 
     void dodge (Shell[] shell_list){
+
+        if (alive) {
 //        boolean plane_alive = true;
-        int not_move_step;
-        int right_step;
-        int up_right_step;
-        int up_step;
-        int up_left_step;
-        int left_step;
-        int down_left_step;
-        int down_step;
-        int down_right_step;
+            int not_move_step;
+            int right_step;
+            int up_right_step;
+            int up_step;
+            int up_left_step;
+            int left_step;
+            int down_left_step;
+            int down_step;
+            int down_right_step;
 
-        Shell[] original_position = shell_list;
-        //step forward time to determine the optimal movement direction for the plane.
-        //one step at a time
+            Shell[] original_position = shell_list;
+            //step forward time to determine the optimal movement direction for the plane.
+            //one step at a time
 
 
-
-        //move right
-        Plane plane_move_right = new Plane( (int) x + speed, (int) y);
-        int min_step_move_right = step_from_collide(plane_move_right, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_right, shell_list[i]);
-//            if (step_temp < min_step_move_right)
-//                min_step_move_right = step_temp;
-//        }
-        System.out.println("move right step = " + min_step_move_right);
+            //move right
+            Plane plane_move_right = new Plane((int) x + speed, (int) y);
+            int min_step_move_right = step_from_collide(plane_move_right, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_right, shell_list[i]);
+                if (step_temp < min_step_move_right)
+                    min_step_move_right = step_temp;
+            }
+            System.out.println("move right step = " + min_step_move_right);
 //        System.out.println("diyibianzhihoude shell list 0 = " + shell_list[0].x + "  " + shell_list[0].y);
 
 
-
-        //not move
-        Plane plane_not_move = new Plane( (int) x, (int) y);
-        int min_step_not_move = step_from_collide(plane_not_move, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_not_move, shell_list[i]);
-//            if (step_temp < min_step_not_move)
-//                min_step_not_move = step_temp;
-//        }
-        System.out.println("not move step = " + min_step_not_move);
-
-
-        //move up_right
-        Plane plane_move_up_right = new Plane( (int) x + speed, (int) y - speed);
-        int min_step_move_up_right = step_from_collide(plane_move_up_right, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_up_right, shell_list[i]);
-//            if (step_temp < min_step_move_up_right)
-//                min_step_move_up_right = step_temp;
-//        }
-        System.out.println("move up right step = " + min_step_move_up_right);
+            //not move
+            Plane plane_not_move = new Plane((int) x, (int) y);
+            int min_step_not_move = step_from_collide(plane_not_move, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_not_move, shell_list[i]);
+                if (step_temp < min_step_not_move)
+                    min_step_not_move = step_temp;
+            }
+            System.out.println("not move step = " + min_step_not_move);
 
 
-        //move up
-        Plane plane_move_up = new Plane( (int) x, (int) y - speed);
-        int min_step_move_up = step_from_collide(plane_move_up, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_up, shell_list[i]);
-//            if (step_temp < min_step_move_up)
-//                min_step_move_up = step_temp;
-//        }
-        System.out.println("move up step = " + min_step_move_up);
-
-        //move up_left
-        Plane plane_move_up_left = new Plane( (int) x - speed, (int) y - speed);
-        int min_step_move_up_left = step_from_collide(plane_move_up_left, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_up_left, shell_list[i]);
-//            if (step_temp < min_step_move_up_left)
-//                min_step_move_up_left = step_temp;
-//        }
-        System.out.println("move up left step = " + min_step_move_up_left);
+            //move up_right
+            Plane plane_move_up_right = new Plane((int) x + speed, (int) y - speed);
+            int min_step_move_up_right = step_from_collide(plane_move_up_right, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_up_right, shell_list[i]);
+                if (step_temp < min_step_move_up_right)
+                    min_step_move_up_right = step_temp;
+            }
+            System.out.println("move up right step = " + min_step_move_up_right);
 
 
-        //move left
-        Plane plane_move_left = new Plane( (int) x - speed, (int) y);
-        int min_step_move_left = step_from_collide(plane_move_left, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_left, shell_list[i]);
-//            if (step_temp < min_step_move_left)
-//                min_step_move_left = step_temp;
-//        }
-        System.out.println("move left step = " + min_step_move_left);
+            //move up
+            Plane plane_move_up = new Plane((int) x, (int) y - speed);
+            int min_step_move_up = step_from_collide(plane_move_up, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_up, shell_list[i]);
+                if (step_temp < min_step_move_up)
+                    min_step_move_up = step_temp;
+            }
+            System.out.println("move up step = " + min_step_move_up);
+
+            //move up_left
+            Plane plane_move_up_left = new Plane((int) x - speed, (int) y - speed);
+            int min_step_move_up_left = step_from_collide(plane_move_up_left, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_up_left, shell_list[i]);
+                if (step_temp < min_step_move_up_left)
+                    min_step_move_up_left = step_temp;
+            }
+            System.out.println("move up left step = " + min_step_move_up_left);
 
 
-        //move down_left
-        Plane plane_move_down_left = new Plane( (int) x - speed, (int) y + speed);
-        int min_step_move_down_left = step_from_collide(plane_move_down_left, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_down_left, shell_list[i]);
-//            if (step_temp < min_step_move_down_left)
-//                min_step_move_down_left = step_temp;
-//        }
-        System.out.println("move down left step = " + min_step_move_down_left);
+            //move left
+            Plane plane_move_left = new Plane((int) x - speed, (int) y);
+            int min_step_move_left = step_from_collide(plane_move_left, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_left, shell_list[i]);
+                if (step_temp < min_step_move_left)
+                    min_step_move_left = step_temp;
+            }
+            System.out.println("move left step = " + min_step_move_left);
 
 
-        //move down
-        Plane plane_move_down = new Plane( (int) x, (int) y + speed);
-        int min_step_move_down = step_from_collide(plane_move_down, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_down, shell_list[i]);
-//            if (step_temp < min_step_move_down)
-//                min_step_move_down = step_temp;
-//        }
-        System.out.println("move down step = " + min_step_move_down);
+            //move down_left
+            Plane plane_move_down_left = new Plane((int) x - speed, (int) y + speed);
+            int min_step_move_down_left = step_from_collide(plane_move_down_left, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_down_left, shell_list[i]);
+                if (step_temp < min_step_move_down_left)
+                    min_step_move_down_left = step_temp;
+            }
+            System.out.println("move down left step = " + min_step_move_down_left);
 
 
-        //move down_right
-        Plane plane_move_down_right = new Plane( (int) x + speed, (int) y + speed);
-        int min_step_move_down_right = step_from_collide(plane_move_down_right, shell_list[0]);
-//        for (int i = 1; i < shell_list.length; i ++){
-//            int step_temp = step_from_collide(plane_move_down_right, shell_list[i]);
-//            if (step_temp < min_step_move_down_right)
-//                min_step_move_down_right = step_temp;
-//        }
-        System.out.println("move down right step = " + min_step_move_down_right);
+            //move down
+            Plane plane_move_down = new Plane((int) x, (int) y + speed);
+            int min_step_move_down = step_from_collide(plane_move_down, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_down, shell_list[i]);
+                if (step_temp < min_step_move_down)
+                    min_step_move_down = step_temp;
+            }
+            System.out.println("move down step = " + min_step_move_down);
 
 
-        //find the optimal moving direction and move
-        find_movement(min_step_not_move, min_step_move_right, min_step_move_up_right, min_step_move_up,
-                        min_step_move_up_left, min_step_move_left, min_step_move_down_left, min_step_move_down, min_step_move_down_right);
+            //move down_right
+            Plane plane_move_down_right = new Plane((int) x + speed, (int) y + speed);
+            int min_step_move_down_right = step_from_collide(plane_move_down_right, shell_list[0]);
+            for (int i = 1; i < shell_list.length; i++) {
+                int step_temp = step_from_collide(plane_move_down_right, shell_list[i]);
+                if (step_temp < min_step_move_down_right)
+                    min_step_move_down_right = step_temp;
+            }
+            System.out.println("move down right step = " + min_step_move_down_right);
 
 
-        shell_list[0] = original_position[0];
+            //find the optimal moving direction and move
+            find_movement(min_step_not_move, min_step_move_right, min_step_move_up_right, min_step_move_up,
+                    min_step_move_up_left, min_step_move_left, min_step_move_down_left, min_step_move_down, min_step_move_down_right);
+        }
+
+
+//        shell_list[0] = original_position[0];
     }
 
 
@@ -217,8 +218,10 @@ public class Plane  extends GameObject {
 
 
         //minimum is the first element
-        if (not_move_step == Arr[Arr.length - 1])
+        if (not_move_step == Arr[Arr.length - 1]) {
             reset();
+            return;s
+        }
 
         if (right_step == Arr[Arr.length - 1])
             right = true;
@@ -260,26 +263,26 @@ public class Plane  extends GameObject {
 
     int step_from_collide(Plane plane, Shell shell){
         int step = 0;
-        System.out.println("shell position = " + shell.x + "  " + shell.y);
+//        System.out.println("shell position = " + shell.x + "  " + shell.y);
 
-        Shell test_shell = new Shell();
-        test_shell = shell;
-
-        test_shell.x = shell.x;
-        test_shell.y = shell.y;
+        Shell test_shell = new Shell(shell.x, shell.y);
+//        test_shell = shell;
+//
+//        test_shell.x = shell.x;
+//        test_shell.y = shell.y;
 
 
 //        Rectangle plane_rect = new Rectangle( (int) plane.x, (int) plane.y, this.width, this.height);
-        for (step = 1; step < 10000; step ++){
+        for (step = 1; step < 1000; step ++){
             if (plane.getRect().intersects(test_shell.getRect())){
-                System.out.println("will collide in " + step);
+//                System.out.println("will collide in " + step);
                 break;
             }
 
             //step forward
             else {
-                test_shell.x += shell.speed * Math.cos(shell.degree);
-                test_shell.y += shell.speed * Math.sin(shell.degree);
+                test_shell.x += test_shell.speed * Math.cos(test_shell.degree);
+                test_shell.y += test_shell.speed * Math.sin(test_shell.degree);
 //
                 if (test_shell.x < 0 || test_shell.x > Constant.GAME_WIDTH - test_shell.width) {
                     test_shell.degree = Math.PI - test_shell.degree;
