@@ -45,7 +45,7 @@ public class Plane  extends GameObject {
         this.img = img;
         this.x = x;
         this.y = y;
-        this.speed = 5;
+        this.speed = 6;
         this.width = img.getWidth(null) ;
         this.height = img.getHeight(null);
 
@@ -201,7 +201,7 @@ public class Plane  extends GameObject {
 
             //find the optimal moving direction and move
             find_movement(min_step_not_move, min_step_move_right, min_step_move_up_right, min_step_move_up,
-                    min_step_move_up_left, min_step_move_left, min_step_move_down_left, min_step_move_down, min_step_move_down_right);
+                    min_step_move_up_left, min_step_move_left, min_step_move_down_left, min_step_move_down, min_step_move_down_right, plane_not_move);
         }
 
 
@@ -211,52 +211,134 @@ public class Plane  extends GameObject {
 
     //move to the largest collision steps direction
     void find_movement(int not_move_step, int right_step, int up_right_step, int up_step,
-                        int up_left_step, int left_step, int down_left_step, int down_step, int down_right_step){
+                        int up_left_step, int left_step, int down_left_step, int down_step, int down_right_step, Plane plane){
         int[] Arr = {not_move_step, right_step, up_right_step, up_step, up_left_step, left_step,
                     down_left_step, down_step, down_right_step};
         Arrays.sort(Arr);
 
 
         //minimum is the first element
+        //not move is priority
         if (not_move_step == Arr[Arr.length - 1]) {
             reset();
-            return;s
+            return;
         }
 
-        if (right_step == Arr[Arr.length - 1])
-            right = true;
+        else {
 
-        if (up_right_step == Arr[Arr.length - 1]){
-            up = true;
-            right = true;
+            //if two or more steps are the same, move further from the wall
+            if (Arr[Arr.length - 1] == Arr[Arr.length - 2]) {
+                double distance_from_right_wall = 0;
+                double distance_from_left_wall = 0;
+                double distance_from_top_wall = 0;
+                double distance_from_bottom_wall = 0;
+
+                double distance_from_top_right = 0;
+                double distance_from_top_left = 0;
+                double distance_from_bottom_left = 0;
+                double distance_from_bottom_right = 0;
+
+                if (right_step == Arr[Arr.length - 1]) {
+                    distance_from_right_wall = Constant.GAME_WIDTH - plane.x - 22;
+                }
+                if (left_step == Arr[Arr.length - 1]) {
+                    distance_from_left_wall = plane.x;
+                }
+                if (up_step == Arr[Arr.length - 1]) {
+                    distance_from_top_wall = plane.y;
+                }
+                if (down_step == Arr[Arr.length - 1]) {
+                    distance_from_bottom_wall = Constant.GAME_HEIGHT - plane.y - 33;
+                }
+
+                if (up_right_step == Arr[Arr.length - 1]) {
+                    distance_from_top_right = Math.sqrt(Math.pow((Constant.GAME_WIDTH - plane.x - 22), 2) + Math.pow(plane.y, 2));
+                }
+                if (up_left_step == Arr[Arr.length - 1]) {
+                    distance_from_top_left = Math.sqrt(Math.pow(plane.x, 2) + Math.pow(plane.y, 2));
+                }
+                if (down_left_step == Arr[Arr.length - 1]) {
+                    distance_from_bottom_left = Math.sqrt(Math.pow(plane.x, 2) + Math.pow(Constant.GAME_HEIGHT - plane.y - 33, 2));
+                }
+                if (down_right_step == Arr[Arr.length - 1]) {
+                    distance_from_bottom_right = Math.sqrt(Math.pow((Constant.GAME_WIDTH - plane.x - 22), 2) + Math.pow(Constant.GAME_HEIGHT - plane.y - 33, 2));
+                }
+
+                //move to the direction that has distance largest
+                double[] distance = {distance_from_right_wall, distance_from_left_wall, distance_from_top_wall, distance_from_bottom_wall, distance_from_top_right,
+                                    distance_from_top_left, distance_from_bottom_left, distance_from_bottom_right};
+
+                Arrays.sort(distance);
+                //largest distance is length - 1
+
+                if (distance_from_right_wall == distance[distance.length - 1]) {
+                    right = true;
+                }
+                if (distance_from_left_wall == distance[distance.length - 1]) {
+                    left = true;
+                }
+                if (distance_from_top_wall == distance[distance.length - 1]) {
+                    up = true;
+                }
+                if (distance_from_bottom_wall == distance[distance.length - 1]) {
+                    down = true;
+                }
+
+                if (distance_from_top_right == distance[distance.length - 1]) {
+                    up = true;
+                    right = true;
+                }
+                if (distance_from_top_left == distance[distance.length - 1]) {
+                    up = true;
+                    left = true;
+                }
+                if (distance_from_bottom_left == distance[distance.length - 1]) {
+                    down = true;
+                    left = true;
+                }
+                if (distance_from_bottom_right == distance[distance.length - 1]) {
+                    down = true;
+                    right = true;
+                }
+            }
+
+            //if only one is max step or none
+            else {
+                if (right_step == Arr[Arr.length - 1])
+                    right = true;
+
+                if (up_right_step == Arr[Arr.length - 1]) {
+                    up = true;
+                    right = true;
+                }
+
+                if (up_step == Arr[Arr.length - 1])
+                    up = true;
+
+                if (up_left_step == Arr[Arr.length - 1]) {
+                    up = true;
+                    left = true;
+                }
+
+                if (left_step == Arr[Arr.length - 1]) {
+                    left = true;
+                }
+
+                if (down_left_step == Arr[Arr.length - 1]) {
+                    down = true;
+                    left = true;
+                }
+
+                if (down_step == Arr[Arr.length - 1]) {
+                    down = true;
+                }
+
+                if (down_right_step == Arr[Arr.length - 1]) {
+                    down = true;
+                    right = true;
+                }
+            }
         }
-
-        if (up_step == Arr[Arr.length - 1])
-            up = true;
-
-        if (up_left_step == Arr[Arr.length - 1]){
-            up = true;
-            left = true;
-        }
-
-        if (left_step == Arr[Arr.length - 1]){
-            left = true;
-        }
-
-        if (down_left_step == Arr[Arr.length - 1]){
-            down = true;
-            left = true;
-        }
-
-        if (down_step == Arr[Arr.length - 1]){
-            down = true;
-        }
-
-        if (down_right_step == Arr[Arr.length - 1]){
-            down = true;
-            right = true;
-        }
-
     }
 
 

@@ -15,7 +15,7 @@ public class MyGameFrame extends JFrame{
 
     Plane plane = new Plane(planeImg, 250, 250);
 
-    Shell[] shell_list = new Shell[20];
+    Shell[] shell_list = new Shell[15];
 
     double closet_shell_degree;
 
