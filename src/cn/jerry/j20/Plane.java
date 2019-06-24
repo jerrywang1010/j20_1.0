@@ -1,5 +1,6 @@
 package cn.jerry.j20;
 
+import javax.swing.plaf.synth.SynthScrollBarUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.sql.Array;
@@ -84,37 +85,40 @@ public class Plane  extends GameObject {
     void dodge (Shell[] shell_list){
 
         if (alive) {
-//        boolean plane_alive = true;
-            int not_move_step;
-            int right_step;
-            int up_right_step;
-            int up_step;
-            int up_left_step;
-            int left_step;
-            int down_left_step;
-            int down_step;
-            int down_right_step;
+            int min_step_not_move = 0;
+            int min_step_move_right = 0;
+            int min_step_move_up_right = 0;
+            int min_step_move_up = 0;
+            int min_step_move_up_left = 0;
+            int min_step_move_left = 0;
+            int min_step_move_down_left = 0;
+            int min_step_move_down = 0;
+            int min_step_move_down_right = 0;
 
             Shell[] original_position = shell_list;
             //step forward time to determine the optimal movement direction for the plane.
             //one step at a time
 
+            System.out.println("================================");
+
+            //need to consider if the plane is at the boundary
 
             //move right
-            Plane plane_move_right = new Plane((int) x + speed, (int) y);
-            int min_step_move_right = step_from_collide(plane_move_right, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_right, shell_list[i]);
-                if (step_temp < min_step_move_right)
-                    min_step_move_right = step_temp;
+            if (x + speed + 22 < Constant.GAME_WIDTH) {
+                Plane plane_move_right = new Plane((int) x + speed, (int) y);
+                min_step_move_right = step_from_collide(plane_move_right, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_right, shell_list[i]);
+                    if (step_temp < min_step_move_right)
+                        min_step_move_right = step_temp;
+                }
             }
             System.out.println("move right step = " + min_step_move_right);
-//        System.out.println("diyibianzhihoude shell list 0 = " + shell_list[0].x + "  " + shell_list[0].y);
 
 
             //not move
             Plane plane_not_move = new Plane((int) x, (int) y);
-            int min_step_not_move = step_from_collide(plane_not_move, shell_list[0]);
+            min_step_not_move = step_from_collide(plane_not_move, shell_list[0]);
             for (int i = 1; i < shell_list.length; i++) {
                 int step_temp = step_from_collide(plane_not_move, shell_list[i]);
                 if (step_temp < min_step_not_move)
@@ -124,84 +128,128 @@ public class Plane  extends GameObject {
 
 
             //move up_right
-            Plane plane_move_up_right = new Plane((int) x + speed, (int) y - speed);
-            int min_step_move_up_right = step_from_collide(plane_move_up_right, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_up_right, shell_list[i]);
-                if (step_temp < min_step_move_up_right)
-                    min_step_move_up_right = step_temp;
+            if (x + 22 + speed < Constant.GAME_WIDTH && y - speed > 0) {
+                Plane plane_move_up_right = new Plane((int) x + speed, (int) y - speed);
+                min_step_move_up_right = step_from_collide(plane_move_up_right, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_up_right, shell_list[i]);
+                    if (step_temp < min_step_move_up_right)
+                        min_step_move_up_right = step_temp;
+                }
             }
             System.out.println("move up right step = " + min_step_move_up_right);
 
 
             //move up
-            Plane plane_move_up = new Plane((int) x, (int) y - speed);
-            int min_step_move_up = step_from_collide(plane_move_up, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_up, shell_list[i]);
-                if (step_temp < min_step_move_up)
-                    min_step_move_up = step_temp;
+            if (y - speed > 0) {
+                Plane plane_move_up = new Plane((int) x, (int) y - speed);
+                min_step_move_up = step_from_collide(plane_move_up, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_up, shell_list[i]);
+                    if (step_temp < min_step_move_up)
+                        min_step_move_up = step_temp;
+                }
             }
             System.out.println("move up step = " + min_step_move_up);
 
             //move up_left
-            Plane plane_move_up_left = new Plane((int) x - speed, (int) y - speed);
-            int min_step_move_up_left = step_from_collide(plane_move_up_left, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_up_left, shell_list[i]);
-                if (step_temp < min_step_move_up_left)
-                    min_step_move_up_left = step_temp;
+            if (y - speed > 0 && x - speed > 0) {
+                Plane plane_move_up_left = new Plane((int) x - speed, (int) y - speed);
+                min_step_move_up_left = step_from_collide(plane_move_up_left, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_up_left, shell_list[i]);
+                    if (step_temp < min_step_move_up_left)
+                        min_step_move_up_left = step_temp;
+                }
             }
             System.out.println("move up left step = " + min_step_move_up_left);
 
 
             //move left
-            Plane plane_move_left = new Plane((int) x - speed, (int) y);
-            int min_step_move_left = step_from_collide(plane_move_left, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_left, shell_list[i]);
-                if (step_temp < min_step_move_left)
-                    min_step_move_left = step_temp;
+            if (x - speed > 0) {
+                Plane plane_move_left = new Plane((int) x - speed, (int) y);
+                min_step_move_left = step_from_collide(plane_move_left, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_left, shell_list[i]);
+                    if (step_temp < min_step_move_left)
+                        min_step_move_left = step_temp;
+                }
             }
             System.out.println("move left step = " + min_step_move_left);
 
 
             //move down_left
-            Plane plane_move_down_left = new Plane((int) x - speed, (int) y + speed);
-            int min_step_move_down_left = step_from_collide(plane_move_down_left, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_down_left, shell_list[i]);
-                if (step_temp < min_step_move_down_left)
-                    min_step_move_down_left = step_temp;
+            if (x - speed > 0 && y + 33 + speed < Constant.GAME_HEIGHT) {
+                Plane plane_move_down_left = new Plane((int) x - speed, (int) y + speed);
+                min_step_move_down_left = step_from_collide(plane_move_down_left, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_down_left, shell_list[i]);
+                    if (step_temp < min_step_move_down_left)
+                        min_step_move_down_left = step_temp;
+                }
             }
             System.out.println("move down left step = " + min_step_move_down_left);
 
 
             //move down
-            Plane plane_move_down = new Plane((int) x, (int) y + speed);
-            int min_step_move_down = step_from_collide(plane_move_down, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_down, shell_list[i]);
-                if (step_temp < min_step_move_down)
-                    min_step_move_down = step_temp;
+            if (y + 33 + speed < Constant.GAME_HEIGHT) {
+                Plane plane_move_down = new Plane((int) x, (int) y + speed);
+                min_step_move_down = step_from_collide(plane_move_down, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_down, shell_list[i]);
+                    if (step_temp < min_step_move_down)
+                        min_step_move_down = step_temp;
+                }
             }
             System.out.println("move down step = " + min_step_move_down);
 
 
             //move down_right
-            Plane plane_move_down_right = new Plane((int) x + speed, (int) y + speed);
-            int min_step_move_down_right = step_from_collide(plane_move_down_right, shell_list[0]);
-            for (int i = 1; i < shell_list.length; i++) {
-                int step_temp = step_from_collide(plane_move_down_right, shell_list[i]);
-                if (step_temp < min_step_move_down_right)
-                    min_step_move_down_right = step_temp;
+            if (y + 33 +speed < Constant.GAME_HEIGHT && x + speed + 22 < Constant.GAME_WIDTH) {
+                Plane plane_move_down_right = new Plane((int) x + speed, (int) y + speed);
+                min_step_move_down_right = step_from_collide(plane_move_down_right, shell_list[0]);
+                for (int i = 1; i < shell_list.length; i++) {
+                    int step_temp = step_from_collide(plane_move_down_right, shell_list[i]);
+                    if (step_temp < min_step_move_down_right)
+                        min_step_move_down_right = step_temp;
+                }
             }
             System.out.println("move down right step = " + min_step_move_down_right);
 
 
             //find the optimal moving direction and move
+
             find_movement(min_step_not_move, min_step_move_right, min_step_move_up_right, min_step_move_up,
                     min_step_move_up_left, min_step_move_left, min_step_move_down_left, min_step_move_down, min_step_move_down_right, plane_not_move);
+
+            //determine the actual movement direction of plane
+            if (up){
+                if (right)
+                    System.out.println("moving up right");
+                if (left)
+                    System.out.println("moving up left");
+                if (!left && !right)
+                    System.out.println("moving up");
+            }
+            if (down){
+                if (right)
+                    System.out.println("moving down right");
+                if (left)
+                    System.out.println("moving down left");
+                if (!left && !right)
+                    System.out.println("moving down");
+            }
+            if (!up && !down) {
+                if (left)
+                    System.out.println("moving left");
+                if (right)
+                    System.out.println("moving right");
+                if (!left && !right)
+                    System.out.println("not moving");
+            }
+
+
+
         }
 
 
@@ -240,28 +288,40 @@ public class Plane  extends GameObject {
 
                 if (right_step == Arr[Arr.length - 1]) {
                     distance_from_right_wall = Constant.GAME_WIDTH - plane.x - 22;
+                    System.out.println("distance from right wall = " + distance_from_right_wall);
                 }
                 if (left_step == Arr[Arr.length - 1]) {
                     distance_from_left_wall = plane.x;
+                    System.out.println("distance from left wall = " + distance_from_left_wall);
+
                 }
                 if (up_step == Arr[Arr.length - 1]) {
                     distance_from_top_wall = plane.y;
+                    System.out.println("distance from top wall = " + distance_from_top_wall);
+
                 }
                 if (down_step == Arr[Arr.length - 1]) {
                     distance_from_bottom_wall = Constant.GAME_HEIGHT - plane.y - 33;
+                    System.out.println("distance from bottom wall = " + distance_from_bottom_wall);
+
                 }
 
                 if (up_right_step == Arr[Arr.length - 1]) {
                     distance_from_top_right = Math.sqrt(Math.pow((Constant.GAME_WIDTH - plane.x - 22), 2) + Math.pow(plane.y, 2));
+                    System.out.println("distance from top right wall = " + distance_from_top_right);
+
                 }
                 if (up_left_step == Arr[Arr.length - 1]) {
                     distance_from_top_left = Math.sqrt(Math.pow(plane.x, 2) + Math.pow(plane.y, 2));
+                    System.out.println("distance from top left wall = " + distance_from_top_left);
                 }
                 if (down_left_step == Arr[Arr.length - 1]) {
                     distance_from_bottom_left = Math.sqrt(Math.pow(plane.x, 2) + Math.pow(Constant.GAME_HEIGHT - plane.y - 33, 2));
+                    System.out.println("distance from bottom left wall = " + distance_from_bottom_left);
                 }
                 if (down_right_step == Arr[Arr.length - 1]) {
                     distance_from_bottom_right = Math.sqrt(Math.pow((Constant.GAME_WIDTH - plane.x - 22), 2) + Math.pow(Constant.GAME_HEIGHT - plane.y - 33, 2));
+                    System.out.println("distance from down right wall = " + distance_from_bottom_right);
                 }
 
                 //move to the direction that has distance largest
@@ -270,6 +330,7 @@ public class Plane  extends GameObject {
 
                 Arrays.sort(distance);
                 //largest distance is length - 1
+
 
                 if (distance_from_right_wall == distance[distance.length - 1]) {
                     right = true;
@@ -304,38 +365,53 @@ public class Plane  extends GameObject {
 
             //if only one is max step or none
             else {
-                if (right_step == Arr[Arr.length - 1])
+                if (not_move_step == Arr[Arr.length - 1]){
+                    return;
+                }
+
+                if (right_step == Arr[Arr.length - 1]) {
                     right = true;
+                    return;
+                }
 
                 if (up_right_step == Arr[Arr.length - 1]) {
                     up = true;
                     right = true;
+                    return;
                 }
 
-                if (up_step == Arr[Arr.length - 1])
+                if (up_step == Arr[Arr.length - 1]){
                     up = true;
+                    return;
+                }
+
 
                 if (up_left_step == Arr[Arr.length - 1]) {
                     up = true;
                     left = true;
+                    return;
                 }
 
                 if (left_step == Arr[Arr.length - 1]) {
                     left = true;
+                    return;
                 }
 
                 if (down_left_step == Arr[Arr.length - 1]) {
                     down = true;
                     left = true;
+                    return;
                 }
 
                 if (down_step == Arr[Arr.length - 1]) {
                     down = true;
+                    return;
                 }
 
                 if (down_right_step == Arr[Arr.length - 1]) {
                     down = true;
                     right = true;
+                    return;
                 }
             }
         }
@@ -345,17 +421,10 @@ public class Plane  extends GameObject {
 
     int step_from_collide(Plane plane, Shell shell){
         int step = 0;
-//        System.out.println("shell position = " + shell.x + "  " + shell.y);
 
         Shell test_shell = new Shell(shell.x, shell.y);
-//        test_shell = shell;
-//
-//        test_shell.x = shell.x;
-//        test_shell.y = shell.y;
 
-
-//        Rectangle plane_rect = new Rectangle( (int) plane.x, (int) plane.y, this.width, this.height);
-        for (step = 1; step < 1000; step ++){
+        for (step = 0; step < 1500; step ++){
             if (plane.getRect().intersects(test_shell.getRect())){
 //                System.out.println("will collide in " + step);
                 break;
